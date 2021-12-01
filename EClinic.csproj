@@ -21,9 +21,6 @@
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Managers\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Realizations\" />
-    <Folder Include="Utils\" />
     <Folder Include="Views\Meetings\" />
     <Folder Include="Views\MedicalCards\" />
   </ItemGroup>

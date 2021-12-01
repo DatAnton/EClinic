@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using EClinic.Models.ViewModels;
 using EClinic.Managers;
-using EClinic.Repositories;
+using EClinic.Data;
 using EClinic.Models.Domain;
 using AutoMapper;
 
@@ -19,20 +19,18 @@ namespace EClinic.Controllers
         private readonly UserManager<User> _UserManager;
         private readonly MeettingsManager _MeettingsManager;
         private readonly DoctorsManager _DoctorsManager;
-        private readonly IPatientRepository _PatientRepository;
-        private readonly IMeetingRepository _MeetingRepository;
         private readonly IMapper _Mapper;
+        private readonly ClinicContext _ClinicContext;
 
         public MeetingsController(MeettingsManager meettingsManager,
             UserManager<User> userManager, DoctorsManager doctorsManager,
-            IPatientRepository patientRepository, IMeetingRepository meetingRepository,
+            ClinicContext clinicContext,
             IMapper mapper)
         {
             _MeettingsManager = meettingsManager;
             _UserManager = userManager;
             _DoctorsManager = doctorsManager;
-            _PatientRepository = patientRepository;
-            _MeetingRepository = meetingRepository;
+            _ClinicContext = clinicContext;
             _Mapper = mapper;
         }
 
@@ -54,7 +52,7 @@ namespace EClinic.Controllers
             }
 
             var currentUser = await _UserManager.FindByNameAsync(User.Identity.Name);
-            var patient = await _PatientRepository.GetPatientByUserIdAsync(currentUser.Id);
+            var patient = await _ClinicContext.GetPatientByUserIdAsync(currentUser.Id);
             var result = await _MeettingsManager.CreateMeettingAsync(model, patient.Id);
 
             if(!string.IsNullOrEmpty(result))
@@ -89,7 +87,7 @@ namespace EClinic.Controllers
             {
                 model = new MeetingManageViewModel();
             }
-            var meetings = await _MeetingRepository.GetMeettingsAsync(model.doctorTypeId, model.doctorName, model.date);
+            var meetings = await _ClinicContext.GetMeettingsAsync(model.doctorTypeId, model.doctorName, model.date);
             ViewBag.DoctorTypes = AccountController._DoctorTypesCache;
             model.ModelsList = meetings.Select(m => _Mapper.Map<MettingForManagingListViewModel>(m)).ToList();
             return View(model);

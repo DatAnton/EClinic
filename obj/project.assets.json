@@ -1427,7 +1427,7 @@
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/datanton/.nuget/NuGet/NuGet.Config"
+        "/Users/datanton/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net5.0"

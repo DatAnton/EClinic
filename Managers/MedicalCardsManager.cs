@@ -1,7 +1,7 @@
 ﻿using System;
 using EClinic.Models.ViewModels;
 using EClinic.Models.Domain;
-using EClinic.Repositories;
+using EClinic.Data;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using System.Threading.Tasks;
@@ -10,12 +10,12 @@ namespace EClinic.Managers
 {
     public class MedicalCardsManager
     {
-        private readonly IMedicalCardRepository _MedicalCardRepository;
+        private readonly ClinicContext _ClinicContext;
         private readonly IMapper _Mapper;
 
-        public MedicalCardsManager(IMapper mapper, IMedicalCardRepository medicalCardRepository)
+        public MedicalCardsManager(IMapper mapper, ClinicContext clinicContext)
         {
-            _MedicalCardRepository = medicalCardRepository;
+            _ClinicContext = clinicContext;
             _Mapper = mapper;
         }
 
@@ -27,7 +27,7 @@ namespace EClinic.Managers
             {
                 domainMedicalCard.CreatedAt = DateTime.Now;
             }
-            await _MedicalCardRepository.SaveMedicalCardAsync(domainMedicalCard);
+            await _ClinicContext.SaveMedicalCardAsync(domainMedicalCard);
         }
 
 

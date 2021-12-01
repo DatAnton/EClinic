@@ -1,36 +1,13 @@
 ﻿<Properties StartupConfiguration="{B0EB554B-DB18-46FA-968E-920B2928D91C}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Startup.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Data/ClinicContext.cs">
     <Files>
-      <File FileName="Views/MedicalCards/ShowMedicalCard.cshtml" Line="18" Column="10" />
-      <File FileName="Program.cs" Line="16" Column="1" />
-      <File FileName="Models/ViewModels/MeetingForListViewModel.cs" Line="14" Column="1" />
-      <File FileName="Models/ViewModels/MeetingForTableViewModel.cs" Line="9" Column="42" />
-      <File FileName="Managers/MedicalCardsManager.cs" Line="30" Column="82" />
-      <File FileName="Controllers/MedicalCardsController.cs" Line="48" Column="47" />
-      <File FileName="Controllers/AccountController.cs" Line="48" Column="19" />
-      <File FileName="Controllers/MeetingsController.cs" Line="81" Column="58" />
-      <File FileName="Views/Account/Main.cshtml" Line="13" Column="47" />
-      <File FileName="MappingProfile.cs" Line="19" Column="95" />
-      <File FileName="Views/Shared/_Layout.cshtml" Line="24" Column="18" />
-      <File FileName="Views/Account/Index.cshtml" Line="10" Column="32" />
-      <File FileName="Views/Account/SignIn.cshtml" Line="43" Column="70" />
-      <File FileName="Views/Account/LogIn.cshtml" Line="21" Column="92" />
-      <File FileName="Views/Meetings/Create.cshtml" Line="12" Column="33" />
-      <File FileName="Views/Meetings/ManageMeetings.cshtml" Line="63" Column="46" />
-      <File FileName="Views/Meetings/ShowMeetingsForPatient.cshtml" Line="32" Column="98" />
-      <File FileName="Managers/MeettingsManager.cs" Line="95" Column="75" />
-      <File FileName="Views/Meetings/ShowMeetingsForDoctor.cshtml" Line="1" Column="1" />
-      <File FileName="Views/_ViewStart.cshtml" Line="1" Column="1" />
-      <File FileName="Views/_ViewImports.cshtml" Line="1" Column="1" />
-      <File FileName="Realizations/MeettingRepository.cs" Line="1" Column="1" />
-      <File FileName="Realizations/MedicalCardRepository.cs" Line="20" Column="56" />
-      <File FileName="Realizations/DoctorRepository.cs" Line="33" Column="51" />
-      <File FileName="Models/Domain/MedicalCard.cs" Line="4" Column="18" />
-      <File FileName="Models/ViewModels/CreateMedicalCardViewModel.cs" Line="13" Column="46" />
-      <File FileName="Properties/launchSettings.json" Line="20" Column="25" />
-      <File FileName="Repositories/IDoctorRepository.cs" Line="15" Column="1" />
-      <File FileName="Repositories/IMedicalCardRepository.cs" Line="10" Column="29" />
-      <File FileName="Startup.cs" Line="56" Column="57" />
+      <File FileName="Controllers/MedicalCardsController.cs" Line="1" Column="1" />
+      <File FileName="Controllers/MeetingsController.cs" Line="1" Column="1" />
+      <File FileName="Controllers/AccountController.cs" Line="100" Column="70" />
+      <File FileName="Data/ClinicContext.cs" Line="106" Column="48" />
+      <File FileName="Managers/DoctorsManager.cs" Line="25" Column="103" />
+      <File FileName="Managers/MedicalCardsManager.cs" Line="25" Column="56" />
+      <File FileName="Managers/MeettingsManager.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -38,18 +15,11 @@
           <Node name="EClinic" expanded="True">
             <Node name="EClinic" expanded="True">
               <Node name="Controllers" expanded="True" />
-              <Node name="Data" expanded="True" />
+              <Node name="Data" expanded="True">
+                <Node name="ClinicContext.cs" selected="True" />
+              </Node>
               <Node name="Managers" expanded="True" />
-              <Node name="Models" expanded="True">
-                <Node name="Domain" expanded="True" />
-                <Node name="ViewModels" expanded="True" />
-              </Node>
-              <Node name="Realizations" expanded="True" />
-              <Node name="Repositories" expanded="True" />
-              <Node name="Views" expanded="True">
-                <Node name="MedicalCards" expanded="True" />
-              </Node>
-              <Node name="Startup.cs" selected="True" />
+              <Node name="Models" expanded="True" />
             </Node>
           </Node>
         </State>

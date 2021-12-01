@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using EClinic.Models.Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -45,5 +48,127 @@ namespace EClinic.Data
 
             base.OnModelCreating(builder);
         }
+
+        public async Task<Doctor> GetDoctorAsync(int Id)
+        {
+            return await Doctors.FindAsync(Id);
+        }
+
+        public async Task<Doctor> GetDoctorByUserIDAsync(string userId)
+        {
+            return await Doctors.FirstOrDefaultAsync(d => d.UserId == userId);
+        }
+
+        public async Task<List<Doctor>> GetDoctorsByTypesAsync(int typeId)
+        {
+            return await Doctors.Where(d => d.DoctorTypeId == typeId).ToListAsync();
+        }
+
+        public async Task SaveMedicalCardAsync(MedicalCard medicalCard)
+        {
+            MedicalCards.Add(medicalCard);
+            if (medicalCard.Id != 0)
+            {
+                var existed = await MedicalCards.FindAsync(medicalCard.Id);
+                Entry(medicalCard).State = EntityState.Modified;
+            }
+            await SaveChangesAsync();
+        }
+
+        public async Task<MedicalCard> GetMedicalCardAsync(int doctorId, int patientId)
+        {
+            return await MedicalCards.FirstOrDefaultAsync(mc => mc.DoctorId == doctorId && mc.PatientId == patientId);
+        }
+
+        public async Task CreateMeetingAsync(Meetting meetting)
+        {
+            await Meettings.AddAsync(meetting);
+            await SaveChangesAsync();
+        }
+
+        public async Task UpdateMeetingAsync(Meetting meetting)
+        {
+            Meettings.Update(meetting);
+            await SaveChangesAsync();
+        }
+
+        public async Task<Meetting> GetMeettingAsync(int Id)
+        {
+            return await Meettings.FindAsync(Id);
+        }
+
+        public Task<List<Meetting>> GetMeettingsAsync(int? doctorTypeId, string doctorName, DateTime? date)
+        {
+            if (!doctorTypeId.HasValue && string.IsNullOrEmpty(doctorName) && !date.HasValue)
+            {
+                return Task.FromResult(new List<Meetting>());
+            }
+            IQueryable<Meetting> result = Meettings
+                .Include(e => e.Doctor.User).Include(e => e.Patient.User)
+                .Include(e => e.MeettingStatus).Include(e => e.Doctor.DoctorType);
+
+            if (doctorTypeId.HasValue)
+            {
+                result = result.Where(e => e.Doctor.DoctorTypeId == doctorTypeId);
+            }
+            if (!string.IsNullOrEmpty(doctorName))
+            {
+                result = result.Where(e => e.Doctor.User.FullName.Contains(doctorName));
+            }
+            if (date.HasValue)
+            {
+                result = result.Where(e => e.MeettingDate.Date == date.Value.Date);
+
+                if (date.Value.Hour != 0)
+                {
+                    result = result.Where(e => e.MeettingDate == date.Value);
+                }
+            }
+            return result.ToListAsync();
+        }
+
+        public async Task<List<Meetting>> GetMeettingsOnDayAsync(DateTime dateTime)
+        {
+            return await Meettings.Where(m => m.MeettingDate.Date == dateTime.Date && m.MeettingStatusId != 3).ToListAsync();
+        }
+
+        public async Task<List<Meetting>> GetMeettingsOnDayForDoctorTypeAsync(DateTime dateTime, int doctorTypeId)
+        {
+            return await Meettings.Where(m => m.MeettingDate.Date == dateTime.Date && m.Doctor.DoctorTypeId == doctorTypeId && m.MeettingStatusId != 3).Include(p => p.Doctor).ToListAsync();
+        }
+
+        public async Task<List<Meetting>> GetMeettingsOnDayTimeForDoctorTypeAsync(DateTime dateTime, int doctorTypeId)
+        {
+            return await Meettings.Where(m => m.MeettingDate == dateTime && m.Doctor.DoctorTypeId == doctorTypeId && m.MeettingStatusId != 3).Include(p => p.Doctor).ToListAsync();
+        }
+
+        public async Task<List<Meetting>> GetMeettingsOnWeekForAsync(int personId, bool isDoctor = false)
+        {
+            List<Meetting> result = new List<Meetting>();
+            DateTime indexDay = DateTime.Today.Date;
+            for (int intIndexDay = 0; intIndexDay < 7; intIndexDay++)
+            {
+                var tempRes = Meettings
+                    .Where(m => m.MeettingDate.Date == indexDay.AddDays(intIndexDay).Date
+                        && m.MeettingStatusId != 3)
+                    .OrderBy(q => q.MeettingDate).Include(a => a.Patient.User);
+                if (isDoctor)
+                {
+                    result.AddRange(await tempRes.Where(e => e.DoctorId == personId).ToListAsync());
+                }
+                else
+                {
+                    result.AddRange(await tempRes.Where(e => e.PatientId == personId)
+                        .Include(p => p.Doctor.User).Include(p => p.Doctor.DoctorType).ToListAsync());
+                }
+            }
+            return result;
+        }
+
+        public async Task<Patient> GetPatientByUserIdAsync(string userId)
+        {
+            return await Patients.FirstOrDefaultAsync(p => p.UserId == userId);
+        }
+
     }
 }

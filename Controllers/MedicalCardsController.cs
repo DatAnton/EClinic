@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EClinic.Models.ViewModels;
 using EClinic.Models.Domain;
-using EClinic.Repositories;
+using EClinic.Data;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using EClinic.Managers;
@@ -17,19 +17,17 @@ namespace EClinic.Controllers
     public class MedicalCardsController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly IDoctorRepository _DoctorRepository;
-        private readonly IMedicalCardRepository _MedicalCardRepository;
+        private readonly ClinicContext _ClinicContext;
         private readonly MedicalCardsManager _MedicalCardsManager;
         private readonly IMapper _Mapper;
 
 
-        public MedicalCardsController(UserManager<User> userManager, IDoctorRepository doctorRepository, MedicalCardsManager medicalCardsManager, IMedicalCardRepository medicalCardRepository, IMapper mapper)
+        public MedicalCardsController(UserManager<User> userManager, MedicalCardsManager medicalCardsManager, IMapper mapper, ClinicContext clinicContext)
         {
             _userManager = userManager;
-            _DoctorRepository = doctorRepository;
             _MedicalCardsManager = medicalCardsManager;
-            _MedicalCardRepository = medicalCardRepository;
             _Mapper = mapper;
+            _ClinicContext = clinicContext;
         }
 
         public IActionResult Create()
@@ -43,7 +41,7 @@ namespace EClinic.Controllers
         {
             if(ModelState.IsValid)
             {
-                var doctor = await _DoctorRepository.GetDoctorByUserIDAsync((await _userManager.FindByNameAsync(User.Identity.Name)).Id);
+                var doctor = await _ClinicContext.GetDoctorByUserIDAsync((await _userManager.FindByNameAsync(User.Identity.Name)).Id);
                 model.DoctorId = doctor.Id;
                 await _MedicalCardsManager.SaveMedicalCard(model);
                 return RedirectToAction("ShowMeetingsForDoctor", "Meetings");
@@ -56,9 +54,9 @@ namespace EClinic.Controllers
         {
             if(!doctorId.HasValue)
             {
-                doctorId = (await _DoctorRepository.GetDoctorByUserIDAsync((await _userManager.FindByNameAsync(User.Identity.Name)).Id)).Id;
+                doctorId = (await _ClinicContext.GetDoctorByUserIDAsync((await _userManager.FindByNameAsync(User.Identity.Name)).Id)).Id;
             }
-            var medicalCard = await _MedicalCardRepository.GetMedicalCardAsync(doctorId.Value, patientId);
+            var medicalCard = await _ClinicContext.GetMedicalCardAsync(doctorId.Value, patientId);
             return View(medicalCard != null ? _Mapper.Map<CreateMedicalCardViewModel>(medicalCard) : new CreateMedicalCardViewModel());
         }
     }

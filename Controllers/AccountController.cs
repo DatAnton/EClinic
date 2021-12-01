@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using EClinic.Models.ViewModels;
 using EClinic.Data;
-using EClinic.Repositories;
 using Microsoft.AspNetCore.Authorization;
 
 namespace EClinic.Controllers
@@ -21,11 +20,10 @@ namespace EClinic.Controllers
         private readonly IMapper _Mapper;
         private readonly ClinicContext _ClinicContext;
         public static List<DoctorType> _DoctorTypesCache;
-        private readonly IDoctorRepository _DoctorRepository;
 
         public AccountController(UserManager<User> userManager,
             SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager,
-            IMapper mapper, ClinicContext clinicContext, IDoctorRepository doctorRepository)
+            IMapper mapper, ClinicContext clinicContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -33,10 +31,6 @@ namespace EClinic.Controllers
             _roleManager = roleManager;
             _ClinicContext = clinicContext;
             _DoctorTypesCache = _ClinicContext.DoctorTypes.ToList();
-            _DoctorRepository = doctorRepository;
-            //_roleManager.CreateAsync(new IdentityRole("Doctor"));
-            //_roleManager.CreateAsync(new IdentityRole("Patient"));
-            //_roleManager.CreateAsync(new IdentityRole("Manager"));
         }
 
         [HttpGet]

@@ -13,8 +13,6 @@ using Microsoft.EntityFrameworkCore;
 using EClinic.Data;
 using EClinic.Models.Domain;
 using EClinic.Managers;
-using EClinic.Repositories;
-using EClinic.Realizations;
 using AutoMapper;
 
 namespace EClinic
@@ -53,10 +51,6 @@ namespace EClinic
             services.AddTransient<MeettingsManager>();
             services.AddTransient<DoctorsManager>();
             services.AddTransient<MedicalCardsManager>();
-            services.AddTransient<IMeetingRepository, MeettingRepository>();
-            services.AddTransient<IDoctorRepository, DoctorRepository>();
-            services.AddTransient<IPatientRepository, PatientRepository>();
-            services.AddTransient<IMedicalCardRepository, MedicalCardRepository>();
 
             services.AddControllersWithViews();
         }
